@@ -1,70 +1,82 @@
 <template>
-  <div class="todoList">
-     <ul class="content_todoLists">
-        <li
-          v-for="(list,index) in todoLists"
-          class="content_todoList"
-          :key="{index}"
-          @mouseover="list.isActive = true"
-          @mouseleave="list.isActive=false"
-          v-show="defaultShow || (whichShow?list.isChecked:!list.isChecked)"
-        >
-          <!-- 任务框左边复选按钮 -->
-          <input type="checkbox" class="checkBox" v-model="list.isChecked" />
-          <!-- 双击编辑列表 -->
-          <div
-            class="content_todoList_main"
-            @dblclick="toEdit(list)"
-            v-show="!list.isEditing"
-            :class="{deleted:list.isChecked}"
-          >{{list.value}}</div>
-          <!-- 菜单显示 -->
-          <input
-            type="text"
-            class="content_todoList_main main_input"
-            v-model="list.value"
-            v-show="list.isEditing"
-            v-todo-focus="list.value"
-            @blur="unEdit(list)"
-          />
-          <!-- 任务右边清除按钮 -->
-          <span
-            class="el-icon-close content_todoList_delete"
-            :class="{show: list.isActive}"
-            @click="deleteTodo(index)"
-          ></span>
-        </li>
-      </ul>
+<div>
+  <input
+    type="checkbox"
+    class="checkBox"
+    :value="completed"
+    @change="toggleChecked"
+  />
+  <input
+    v-if="editing"
+    type="text"
+    class="content_todoList_main main_input"
+    v-model="curValue"
+    @blur="unEdit()"
+  />
+  <!-- v-todo-focus="list.value" -->
+  <div
+    v-else
+    @dblclick="toEdit()"
+    :class="['content_todoList_main', { deleted: completed }]"
+  >
+    {{ value }}
   </div>
+</div>
 </template>
 <script>
+/**
+ * props: [value, completed, selected]
+ * emit: change
+ **/
 export default {
+  props: ["value", "completed"],
   data: () => ({
-    todoLists: [],
-    whichShow: true,
-    defaultShow: true,
+    editing: false,
+    curValue: ''
   }),
   methods: {
     // 使添加的todo可编辑
-    toEdit(obj) {
-      obj.isEditing = true;
+    toEdit() {
+      this.editing = true;
+      this.curValue = this.value;
     },
-    // 使添加的todo不可编辑
-    unEdit(obj) {
-      obj.isEditing = false;
+    unEdit() {
+      this.editing = false;
+      this.$emit('change', { value: this.curValue, isChecked: this.completed });
     },
-    // 删除todo
-    deleteTodo(index) {
-      this.todoLists.splice(index, 1);
-      // 以json格式存储数据
-      window.localStorage.setItem('content', JSON.stringify(this.todoLists));
-    },
-    // 清空已完成的todoLists
-    clearTodos() {
-      this.todoLists = this.todoLists.filter(todo => todo.isChecked === false);
-      // 以json格式存储数据
-      window.localStorage.setItem('content', JSON.stringify(this.todoLists));
-    },
+    toggleChecked(e) {
+      const { value } = this;
+      this.$emit('change', { value, isChecked: e.target.checked })
+    }
   }
 };
 </script>
+
+<style scoped>
+/* 任务框左边复选按钮 */
+.checkBox {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+
+/* 双击编辑列表 */
+.content_todoList_main {
+  display: inline-block;
+  text-align: left;
+  margin-left: 16px;
+  font-size: 20px;
+  padding: 6px 0;
+}
+
+.main_input {
+  position: relative;
+  z-index: 1;
+}
+
+.deleted {
+  text-decoration-line: line-through;
+  color: #bbb;
+}
+</style>

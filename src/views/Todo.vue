@@ -21,29 +21,19 @@
         <li
           v-for="(list,index) in todoLists"
           class="content_todoList"
-          :key="{index}"
+          :key="index"
           @mouseover="list.isActive = true"
           @mouseleave="list.isActive=false"
           v-show="defaultShow || (whichShow?list.isChecked:!list.isChecked)"
         >
           <!-- 任务框左边复选按钮 -->
-          <input type="checkbox" class="checkBox" v-model="list.isChecked" />
           <!-- 双击编辑列表 -->
-          <div
-            class="content_todoList_main"
-            @dblclick="toEdit(list)"
-            v-show="!list.isEditing"
-            :class="{deleted:list.isChecked}"
-          >{{list.value}}</div>
-          <!-- 菜单显示 -->
-          <input
-            type="text"
-            class="content_todoList_main main_input"
-            v-model="list.value"
-            v-show="list.isEditing"
-            v-todo-focus="list.value"
-            @blur="unEdit(list)"
-          />
+          <todo-list
+            :value="list.value"
+            :completed="list.isChecked"
+            @change="updateTodo(index, $event)"
+          ></todo-list>
+
           <!-- 任务右边清除按钮 -->
           <span
             class="el-icon-close content_todoList_delete"
@@ -92,6 +82,8 @@
   </div>
 </template>
 <script>
+import TodoList from '@/views/TodoList.vue'
+
 export default {
   data: () => ({
     projectName: 'todos',
@@ -102,6 +94,9 @@ export default {
     defaultShow: true,
     selectAll: false
   }),
+  components: {
+    TodoList
+  },
   computed: {
     // 使用计算属性计算待办todos的次数
     times() {
@@ -116,10 +111,6 @@ export default {
     }
   },
   methods: {
-    // 使添加的todo可编辑
-    toEdit(obj) {
-      obj.isEditing = true;
-    },
     // 使添加的todo不可编辑
     unEdit(obj) {
       obj.isEditing = false;
@@ -142,6 +133,11 @@ export default {
       this.$refs.currentInput.value = '';
       // 使用localStorage以JSON格式存储数据
       window.localStorage.setItem('content', JSON.stringify(this.todoLists));
+    },
+    // value, todoItem = { value, isCheck }
+    updateTodo(index, { value, isChecked }) {
+      const todo = this.todoLists[index];
+      this.todoLists.splice(index, 1, { ...todo, value, isChecked })
     },
     // 删除todo
     deleteTodo(index) {
@@ -192,4 +188,4 @@ export default {
   }
 };
 </script>
-<style src="./Todo.css"></style>
+<style src="./Todo.css" scoped></style>

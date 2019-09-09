@@ -4,10 +4,10 @@
 	  margin: 0;
 	  box-sizing: border-box;
  }
- 
+
  input {
 	  outline: none;
-	 } 
+	 }
  ul,
  li,
  ol {
@@ -70,25 +70,7 @@
 	  background-color: white;
 	  align-items: center;
 	 }
-	 /* 任务框左边复选按钮 */
- .checkBox {
-	  width: 20px;
-	  height: 20px;
-	  margin-left: 10px;
-	 }
-/* 双击编辑列表 */
- .content_todoList_main {
-	  flex: 1;
-	  text-align: left;
-	  margin-left: 16px;
-	  font-size: 20px;
-	  padding: 6px 0;
-	 }
- 
- .main_input {
-	  position: relative;
-	  z-index: 1;
-	 }
+
  /* 任务右边清除按钮 */
  .content_todoList_delete {
 	  height:16px;
@@ -104,7 +86,7 @@
  .show {
 	  display: block;
 	 }
- .deleted { 
+ .deleted {
 	  text-decoration-line: line-through;
 	  color: #bbb;
 	 }
@@ -131,7 +113,7 @@
 	  font-weight: 300;
 	  color: rgb(145, 145, 145);
 	 }
- 
+
  a {
 	  text-decoration: none;
 	  color: rgb(145, 145, 145);
@@ -142,7 +124,7 @@
 .data_clearTodos {
 	  width: 142px;
 	 }
- 
+
  .data_status a {
 	  display: inline-block;
 	  border: 1px solid transparent;
