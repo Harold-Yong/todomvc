@@ -12,7 +12,7 @@
 
 
 ## TODO LIST
-- 1
+- 1: 需要用到：components, views, directive, filter, watch, computed
 - 2
 - 3
 

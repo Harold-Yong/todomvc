@@ -21,14 +21,14 @@ module.exports = {
       .set('assets', resolve('src/assets'))
       .set('variable', resolve('src/variable.styl'))
   ),
-  css: {
-    loaderOptions: {
-      postcss: {
-        // 基准大小 baseSize，需要和rem.js中相同
-        // 1rem=remUnit*px
-        plugins: [px2rem({ remUnit: 100 })]
-      }
-    }
-  },
+  // css: {
+  //   loaderOptions: {
+  //     postcss: {
+  //       // 基准大小 baseSize，需要和rem.js中相同
+  //       // 1rem=remUnit*px
+  //       plugins: [px2rem({ remUnit: 100 })]
+  //     }
+  //   }
+  // },
   productionSourceMap: mode !== 'production',
 };
